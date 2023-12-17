@@ -8,17 +8,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Check the user credentials in the database
     $query = "SELECT * FROM users WHERE email='$email' AND password='$password'";
-    $result = mysqli_query($connection, $query);
+    //$result = mysqli_query($connection, $query);
 
-    if (mysqli_num_rows($result) == 1) {
-        // If user exists, set session variables and redirect to a dashboard or homepage
-        $_SESSION['email'] = $email;
+    if (mysqli_query($connection, $query)) {
+        // Redirect to login page after successful signup
         header("Location: index.php");
+        exit();
     } else {
-        // If login fails, redirect back to the login page with an error message
-        echo "<script>alert('Incorrect password'); window.location='login.php';</script>";
-        $_SESSION['login_error'] = "Invalid email or password";
-        header("Location: login.php");
+        echo "Error: " . $insert_query . "<br>" . mysqli_error($connection);
+        exit();
     }
 }
 ?>
